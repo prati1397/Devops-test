@@ -1,0 +1,25 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install Node.js
+      command: curl -sL https://rpm.nodesource.com/setup_14.x | bash -
+      
+    - name: Install Node.js
+      yum:
+        name: nodejs
+        state: present
+
+    - name: Clone Node.js application
+      git:
+        repo: 'https://github.com/prati1397/Devops-test.git'
+        dest: /home/ec2-user/simple-node-app
+
+    - name: Install npm dependencies
+      command: npm install
+      args:
+        chdir: /home/ec2-user/simple-node-app
+
+    - name: Start the Node.js application
+      command: nohup node app.js &
+      args:
+        chdir: /home/ec2-user/simple-node-app
